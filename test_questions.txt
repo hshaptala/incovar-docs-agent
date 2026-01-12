@@ -1,0 +1,32 @@
+# Questions de Test - Incovar+ Docs Agent
+# 15 questions covering different topics
+
+## Authentification & Connexion
+Comment me connecter au portail Incovar+ ?
+Que faire si j'ai oublié mon mot de passe ?
+Comment changer la langue de l'interface ?
+
+## Contexte & Navigation
+Qu'est-ce que le contexte de connexion ?
+Comment accéder à mon espace employé ?
+Comment me déconnecter du portail ?
+
+## Plannings & Horaires
+Comment consulter mon planning ?
+Comment badger mes heures ?
+
+## Absences & Congés
+Comment poser une demande d'absence ?
+Comment consulter mes soldes de congés ?
+
+## Manager/Responsable
+Comment valider les demandes d'absence de mes employés ?
+Comment consulter les anomalies de mon équipe ?
+
+## Widgets & Dashboard
+Qu'est-ce qu'un widget ?
+Comment personnaliser mon tableau de bord ?
+
+## Hors Sujet (Should answer "I don't know")
+Quel est le salaire moyen en France ?
+
