@@ -9,3 +9,5 @@ langchain-groq
 langchain-chroma
 chromadb
 python-dotenv
+fastapi 
+uvicorn[standard]
