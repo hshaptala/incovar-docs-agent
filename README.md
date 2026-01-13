@@ -43,7 +43,7 @@ python src/build_index.py      # Create vector index
 ### Ask Questions
 
 ```bash
-python src/ask_groq.py
+uvicorn src.ask_groq:app --host 0.0.0.0 --port 8000
 ```
 
 ## Project Structure
