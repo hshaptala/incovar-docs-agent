@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assistant Incovar+</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Toggle Button -->
+    <button
+      class="toggle-button"
+      id="toggleChat"
+      aria-label="Ouvrir l'assistant"
+    >
+      💬
+    </button>
+
+    <!-- Chat Widget -->
+    <div class="chat-widget hidden" id="chatWidget">
+      <!-- Header -->
+      <div class="chat-header">
+        <div class="header-title">
+          <span class="bot-icon">🤖</span>
+          <span>Assistant Incovar+</span>
+        </div>
+        <button class="close-button" id="closeChat" aria-label="Fermer">
+          ✕
+        </button>
+      </div>
+
+      <!-- Messages Container -->
+      <div class="chat-messages" id="messages">
+        <div class="message bot-message">
+          <div class="message-content">
+            Bonjour ! Je suis votre assistant pour la documentation Incovar+.
+            Comment puis-je vous aider ?
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Area -->
+      <div class="chat-input">
+        <input
+          type="text"
+          id="questionInput"
+          placeholder="Posez votre question..."
+          autocomplete="off"
+        />
+        <button id="sendButton" aria-label="Envoyer">➤</button>
+      </div>
+
+      <!-- Status Indicator -->
+      <div class="status-indicator hidden" id="statusIndicator">
+        <span class="typing-dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        Réflexion en cours...
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
