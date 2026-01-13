@@ -37,7 +37,8 @@ RAG (Retrieval-Augmented Generation) system for Incovar+ French documentation.
 
 ```bash
 python src/make_chunks.py      # Process HTML to chunks
-python src/build_index.py      # Create vector index
+python src/make_pdf_chunks.py  # Process company PDF guide to chunks
+python src/build_index_all.py  # Create vector indexes (PDF + HTML)
 ```
 
 ### Ask Questions
@@ -67,3 +68,12 @@ test_questions.txt  - Test questions
 2. **Chunk**: Extract `<div class="main-content">`, convert to Markdown, split by headers
 3. **Index**: Embed chunks with Ollama, store in ChromaDB
 4. **Query**: Retrieve top 8 relevant chunks, send to Groq with French prompt
+
+### PDF guide
+
+- Put the company guide PDF in `data/raw/` (default expected name: `guide_incovar_salarie_fcba.pdf`).
+- Rebuild the indexes after updating the PDF:
+  ```bash
+  python src/make_pdf_chunks.py
+  python src/build_index_all.py --reset
+  ```

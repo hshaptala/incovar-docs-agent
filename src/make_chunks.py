@@ -75,18 +75,22 @@ with open(IN_PATH, "r", encoding="utf-8") as f_in, open(
             if len(d.page_content) > 1800:
                 sub_docs = char_splitter.split_documents([d])
                 for sub_d in sub_docs:
+                    meta = dict(sub_d.metadata or {})
+                    meta["source"] = "html"
                     out = {
                         "url": url,
                         "title": title,
-                        "metadata": sub_d.metadata,
+                        "metadata": meta,
                         "content": sub_d.page_content,
                     }
                     f_out.write(json.dumps(out, ensure_ascii=False) + "\n")
             else:
+                meta = dict(d.metadata or {})
+                meta["source"] = "html"
                 out = {
                     "url": url,
                     "title": title,
-                    "metadata": d.metadata,
+                    "metadata": meta,
                     "content": d.page_content,
                 }
                 f_out.write(json.dumps(out, ensure_ascii=False) + "\n")
