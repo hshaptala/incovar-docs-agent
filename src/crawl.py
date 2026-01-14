@@ -1,5 +1,4 @@
 import re
-import json
 from urllib.parse import urljoin, urlparse
 import requests
 from bs4 import BeautifulSoup
@@ -18,7 +17,7 @@ def normalize(u):
     return re.sub(r"/+$", "/", u)
 
 
-def crawl(start_url, max_pages=200):
+def crawl_docs(start_url, max_pages=200):
     start_url = normalize(start_url)
     q = [start_url]
     seen = set()
@@ -29,33 +28,22 @@ def crawl(start_url, max_pages=200):
             continue
         seen.add(url)
 
-        r = requests.get(url, timeout=30)
-        if r.status_code != 200 or not is_html(r):
-            continue
-
-        soup = BeautifulSoup(r.text, "html.parser")
-        yield url, r.text, (
-            soup.title.string.strip() if soup.title and soup.title.string else ""
-        )
-
-        for a in soup.select("a[href]"):
-            href = a.get("href")
-            if not href:
+        try:
+            r = requests.get(url, timeout=30)
+            if r.status_code != 200 or not is_html(r):
                 continue
-            nxt = normalize(urljoin(url, href))
-            if same_domain(start_url, nxt):
-                q.append(nxt)
 
+            soup = BeautifulSoup(r.text, "html.parser")
+            title = soup.title.string.strip() if soup.title and soup.title.string else ""
+            
+            yield url, r.text, title
 
-if __name__ == "__main__":
-    start = "https://gta-fcba.incovar.com/Incotec/Incovar/Help/fr-FR/PORTAIL/topics/LOGIN.html"
-    out_path = "data/raw/pages.jsonl"
-    with open(out_path, "w", encoding="utf-8") as f:
-        for url, html, title in crawl(start):
-            f.write(
-                json.dumps(
-                    {"url": url, "title": title, "html": html}, ensure_ascii=False
-                )
-                + "\n"
-            )
-            print(url)
+            for a in soup.select("a[href]"):
+                href = a.get("href")
+                if not href:
+                    continue
+                nxt = normalize(urljoin(url, href))
+                if same_domain(start_url, nxt):
+                    q.append(nxt)
+        except Exception:
+            continue

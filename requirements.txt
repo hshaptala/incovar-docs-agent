@@ -9,5 +9,7 @@ langchain-groq
 langchain-chroma
 chromadb
 python-dotenv
+pydantic-settings
 fastapi 
 uvicorn[standard]
+pymupdf
