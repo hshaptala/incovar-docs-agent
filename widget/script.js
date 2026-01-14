@@ -68,16 +68,12 @@ async function handleSendQuestion() {
     addMessage(data.answer, "bot", data.sources);
   } catch (error) {
     console.error("Error:", error);
-    addMessage(
-      "Désolé, je n'ai pas pu traiter votre demande. Veuillez réessayer.",
-      "bot"
-    );
   } finally {
     setProcessing(false);
   }
 }
 
-function addMessage(text, type, sources = []) {
+function addMessage(text, type) {
   const messageDiv = document.createElement("div");
   messageDiv.className = `message ${type}-message`;
 
@@ -86,28 +82,6 @@ function addMessage(text, type, sources = []) {
   contentDiv.textContent = text;
 
   messageDiv.appendChild(contentDiv);
-
-  // Add sources if available (for bot messages)
-  if (type === "bot" && sources && sources.length > 0) {
-    const validSources = sources.filter((s) => s && s !== "N/A");
-
-    if (validSources.length > 0) {
-      const sourcesDiv = document.createElement("div");
-      sourcesDiv.className = "sources";
-      sourcesDiv.innerHTML =
-        "<strong>Sources:</strong><br>" +
-        validSources
-          .map(
-            (url, i) =>
-              `<a href="${url}" target="_blank">${i + 1}. ${extractPageTitle(
-                url
-              )}</a>`
-          )
-          .join("<br>");
-
-      messageDiv.appendChild(sourcesDiv);
-    }
-  }
 
   messagesContainer.appendChild(messageDiv);
   scrollToBottom();

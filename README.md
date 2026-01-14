@@ -5,7 +5,7 @@ RAG (Retrieval-Augmented Generation) system for Incovar+ French documentation.
 ## Stack
 
 - **Embeddings**: Ollama nomic-embed-text (local, free)
-- **LLM**: Groq llama-3.1-8b-instant (cloud, free tier)
+- **LLM**: Groq llama-3.3-70b-versatile (cloud, free tier)
 - **Vector DB**: ChromaDB
 - **Processing**: LangChain + BeautifulSoup + Markdownify
 
@@ -13,19 +13,25 @@ RAG (Retrieval-Augmented Generation) system for Incovar+ French documentation.
 
 - Python 3.8+
 - [Ollama](https://ollama.ai/) installed with `nomic-embed-text`:
+
   ```bash
   ollama pull nomic-embed-text
   ```
+
 - Groq API key (free at [console.groq.com](https://console.groq.com/keys))
 
 ## Setup
 
-1. Install dependencies:
+1. Clone the repository
+
+2. Install dependencies:
+
    ```bash
    pip install -r requirements.txt
    ```
 
-2. Configure Groq API:
+3. Configure Groq API:
+
    ```bash
    cp .env.example .env
    # Edit .env and add: GROQ_API_KEY=your_key_here
@@ -33,47 +39,40 @@ RAG (Retrieval-Augmented Generation) system for Incovar+ French documentation.
 
 ## Usage
 
-### Build Index (one-time or after doc updates)
+### Crawl Documentation
 
 ```bash
-python src/make_chunks.py      # Process HTML to chunks
-python src/make_pdf_chunks.py  # Process company PDF guide to chunks
-python src/build_index_all.py  # Create vector indexes (PDF + HTML)
+python -m src.cli crawl
 ```
 
-### Ask Questions
+### Build Indexes
 
 ```bash
-uvicorn src.ask_groq:app --host 0.0.0.0 --port 8000
+python -m src.cli index              # Build indexes for both HTML & PDF
+python -m src.cli index --reset      # Full rebuild (deletes existing index)
+python -m src.cli index --html-only  # Only HTML docs
+python -m src.cli index --pdf-only   # Only PDF guide
+```
+
+### Start API Server
+
+```bash
+uvicorn src.api:app --host 0.0.0.0 --port 8000
 ```
 
 ## Project Structure
 
-```
+```text
 src/
-  crawl.py          - Web crawler (for doc updates)
-  make_chunks.py    - HTML→Markdown→chunks (1500 chars, 200 overlap)
-  build_index.py    - Build ChromaDB vector index
-  ask_groq.py       - Interactive Q&A with Groq
+  config.py      - Configuration & settings
+  crawl.py       - Web crawler
+  process.py     - HTML & PDF processing
+  index.py       - Vector database operations
+  retrieve.py    - Document retrieval
+  api.py         - FastAPI application
+  cli.py         - CLI commands
 data/
-  raw/              - Crawled HTML pages
-  processed/        - Processed chunks
-  chroma/           - Vector database
-test_questions.txt  - Test questions
+  raw/           - Source documents (HTML, PDF)
+  processed/     - Processed chunks (JSONL)
+  chroma/        - Vector database
 ```
-
-## How It Works
-
-1. **Crawl**: Fetch HelpNDoc documentation pages
-2. **Chunk**: Extract `<div class="main-content">`, convert to Markdown, split by headers
-3. **Index**: Embed chunks with Ollama, store in ChromaDB
-4. **Query**: Retrieve top 8 relevant chunks, send to Groq with French prompt
-
-### PDF guide
-
-- Put the company guide PDF in `data/raw/` (default expected name: `guide_incovar_salarie_fcba.pdf`).
-- Rebuild the indexes after updating the PDF:
-  ```bash
-  python src/make_pdf_chunks.py
-  python src/build_index_all.py --reset
-  ```
