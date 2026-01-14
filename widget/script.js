@@ -79,7 +79,13 @@ function addMessage(text, type) {
 
   const contentDiv = document.createElement("div");
   contentDiv.className = "message-content";
-  contentDiv.textContent = text;
+  
+  // Preserve formatting by converting newlines to <br> and using innerHTML
+  contentDiv.innerHTML = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\n/g, '<br>');
 
   messageDiv.appendChild(contentDiv);
 
