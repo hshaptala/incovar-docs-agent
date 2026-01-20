@@ -26,7 +26,7 @@ def save_chunks(documents, output_path):
 
 
 def cmd_crawl():
-    out_path = settings.PROCESSED_DIR / "pages.jsonl"
+    out_path = settings.RAW_DIR / "pages.jsonl"
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     with open(out_path, "w", encoding="utf-8") as f:
